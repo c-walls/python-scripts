@@ -84,13 +84,19 @@ def pdf_to_txt(input_file, base_name):
 
 def txt_to_audio(text, base_name):
     print(f"Beginning Audio Conversion...")
-    def split_text_into_chunks(text, max_sentence_length=100, max_bytes=4800):
-        # 
-        text = text.replace('\n', ' ').replace('\r', '')
+    def split_text_into_chunks(text, max_sentence_length=200, max_bytes=4800):
+        
+        # Clean up the text
         text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
+        text = text.replace('\n', ' ').replace('\r', '')
+        text = re.sub('\s{3,}', '  ', text)
         text = re.sub(r'([.!?])  ', r'\1\n\n', text)
+        
         # Split the text into sentences
         sentences = re.split(r'(?<=[.!?]) +', text)
+
+        print(text)
+        print(f"Total number of sentences: {len(sentences)}")
 
         # Split long sentences into smaller ones
         short_sentences = []
@@ -98,8 +104,8 @@ def txt_to_audio(text, base_name):
             while len(sentence) > max_sentence_length:
                 # Find the last space within the limit
                 space_index = sentence.rfind(' ', 0, max_sentence_length)
-                short_sentences.append(sentence[:space_index])
-                sentence = sentence[space_index+1:]  # Skip the space
+                short_sentences.append(sentence[:space_index] + '.')
+                sentence = sentence[space_index:]
             short_sentences.append(sentence)
 
         # Recombine the short sentences into chunks
