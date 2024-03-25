@@ -7,6 +7,7 @@ import pytesseract
 from PyPDF4 import PdfFileReader
 import gtts
 import os
+import unicodedata
 from tqdm import tqdm
 from pydub import AudioSegment
 from pdf2jpg import pdf2jpg
@@ -84,6 +85,10 @@ def pdf_to_txt(input_file, base_name):
 def txt_to_audio(text, base_name):
     print(f"Beginning Audio Conversion...")
     def split_text_into_chunks(text, max_sentence_length=100, max_bytes=4800):
+        # 
+        text = text.replace('\n', ' ').replace('\r', '')
+        text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
+        text = re.sub(r'([.!?])  ', r'\1\n\n', text)
         # Split the text into sentences
         sentences = re.split(r'(?<=[.!?]) +', text)
 
