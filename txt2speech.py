@@ -57,8 +57,11 @@ def pdf_to_txt(input_file, base_name):
         # Update the progress bar
         progress_bar.update(1)
 
-    # Print a message before making the request to the Google Text-to-Speech API
-    print("Converting text to speech...")
+    # Clean the completed text
+    text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
+    text = text.replace('\n', ' ').replace('\r', '')
+    text = re.sub('\s{3,}', '  ', text)
+    text = re.sub(r'([.!?])  ', r'\1\n\n', text)
 
     # Close the tqdm progress bar
     progress_bar.close()
@@ -85,12 +88,6 @@ def pdf_to_txt(input_file, base_name):
 def txt_to_audio(text, base_name):
     print(f"Beginning Audio Conversion...")
     def split_text_into_chunks(text, max_sentence_length=200, max_bytes=4800):
-        
-        # Clean up the text
-        text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
-        text = text.replace('\n', ' ').replace('\r', '')
-        text = re.sub('\s{3,}', '  ', text)
-        text = re.sub(r'([.!?])  ', r'\1\n\n', text)
         
         # Split the text into sentences
         sentences = re.split(r'(?<=[.!?]) +', text)
@@ -171,6 +168,12 @@ if input_file.endswith(".pdf"):
 elif input_file.endswith(".txt"):
     with open(input_file, "r") as f:
         text = f.read()
+
+        # Clean the text
+        text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
+        text = text.replace('\n', ' ').replace('\r', '')
+        text = re.sub('\s{3,}', '  ', text)
+        text = re.sub(r'([.!?])  ', r'\1\n\n', text)
 
 txt_to_audio(text, base_name)
 print("All done!")
