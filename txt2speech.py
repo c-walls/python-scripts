@@ -52,16 +52,20 @@ def pdf_to_txt(input_file, base_name):
         # Extract the text from the image using Tesseract
         page_text = pytesseract.image_to_string(image_path)
         # Append the text to the final text
-        text += page_text
-        
+        text += page_text.strip() + " \n\n###@@@###"
+
         # Update the progress bar
         progress_bar.update(1)
 
     # Clean the completed text
     text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
-    text = text.replace('\n', ' ').replace('\r', '')
-    text = re.sub('\s{3,}', '  ', text)
+    text = re.sub('###@@@###.{0,40}\n', '', text)
+    text = text.replace('\r', '').replace('\n', ' ')
+    text = text.replace('- ', '')
+    text = re.sub('\s{3,}', '.  ', text)
+    text = re.sub('\n{0,2}###@@@###$', '', text)
     text = re.sub(r'([.!?])  ', r'\1\n\n', text)
+    text = text.replace('  ', ' ')
 
     # Close the tqdm progress bar
     progress_bar.close()
@@ -169,11 +173,15 @@ elif input_file.endswith(".txt"):
     with open(input_file, "r") as f:
         text = f.read()
 
-        # Clean the text
-        text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
-        text = text.replace('\n', ' ').replace('\r', '')
-        text = re.sub('\s{3,}', '  ', text)
-        text = re.sub(r'([.!?])  ', r'\1\n\n', text)
+    # Clean the text
+    text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
+    text = re.sub('###@@@###.{0,40}\n', '', text)
+    text = text.replace('\r', '').replace('\n', ' ')
+    text = text.replace('- ', '')
+    text = re.sub('\s{3,}', '  ', text)
+    text = re.sub('\n\n###@@@###', '', text)
+    text = re.sub(r'([.!?])  ', r'\1\n\n', text)
+    text = text.replace('  ', ' ')
 
 txt_to_audio(text, base_name)
 print("All done!")
