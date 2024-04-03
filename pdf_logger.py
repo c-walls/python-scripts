@@ -1,7 +1,8 @@
 import os
 import datetime
 import sys
-from PyPDF2 import PdfFileReader
+from tqdm import tqdm
+from PyPDF2 import PdfReader
 
 def create_pdf_log(directory):
     # Get the current date
@@ -17,20 +18,22 @@ def create_pdf_log(directory):
     pdf_files = [file for file in os.listdir(directory) if file.endswith(".pdf")]
     
     # Open the log file in write mode
-    with open(log_file_path, "w") as log_file:
+    with open(log_file_path, "w", encoding="utf-8") as log_file:
         # Iterate over the PDF files
-        for pdf_file in pdf_files:
+        for pdf_file in tqdm(pdf_files, desc="Processing PDF files"):
             # Get the title of the PDF file
             title = os.path.splitext(pdf_file)[0].replace("_", " ")
             
             # Get the number of pages in the PDF file
             pdf_path = os.path.join(directory, pdf_file)
             with open(pdf_path, "rb") as file:
-                pdf = PdfFileReader(file)
-                num_pages = pdf.getNumPages()
+                pdf = PdfReader(file)
+                num_pages = len(pdf.pages)
             
             # Write the title and number of pages to the log file
             log_file.write(f"{title} ({num_pages} pages)\n")
+
+        print("PDF log created successfully.")
 
 if len(sys.argv) > 1:
     directory_path = sys.argv[1]
