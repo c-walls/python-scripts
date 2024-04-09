@@ -60,10 +60,11 @@ def pdf_to_txt(input_file, base_name):
     # Clean the completed text
     text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
     text = re.sub('###@@@###.{0,40}\n', '', text)
+    text = re.sub('###@@@###.{0,40}(\d{1,4})', '', text)
     text = text.replace('\r', '').replace('\n', ' ')
     text = text.replace('- ', '')
     text = re.sub('\s{3,}', '.  ', text)
-    text = re.sub('\n{0,2}###@@@###$', '', text)
+    text = re.sub('###@@@###$', '', text)
     text = re.sub(r'([.!?])  ', r'\1\n\n', text)
     text = text.replace('  ', ' ')
 
@@ -176,10 +177,11 @@ elif input_file.endswith(".txt"):
     # Clean the text
     text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode()
     text = re.sub('###@@@###.{0,40}\n', '', text)
+    text = re.sub('###@@@###.{0,40}(\d{1,4})', '', text)
     text = text.replace('\r', '').replace('\n', ' ')
     text = text.replace('- ', '')
     text = re.sub('\s{3,}', '  ', text)
-    text = re.sub('\n\n###@@@###', '', text)
+    text = re.sub('###@@@###', '', text)
     text = re.sub(r'([.!?])  ', r'\1\n\n', text)
     text = text.replace('  ', ' ')
 
