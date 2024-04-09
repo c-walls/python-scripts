@@ -66,7 +66,9 @@ def pdf_to_txt(input_file, base_name):
     text = re.sub('\s{3,}', '.  ', text)
     text = re.sub('###@@@###$', '', text)
     text = re.sub(r'([.!?])  ', r'\1\n\n', text)
+    text = text.replace('\ne ', '\n- ')
     text = text.replace('  ', ' ')
+    text = text.replace('..', '.')
 
     # Close the tqdm progress bar
     progress_bar.close()
@@ -184,6 +186,7 @@ elif input_file.endswith(".txt"):
     text = re.sub('###@@@###', '', text)
     text = re.sub(r'([.!?])  ', r'\1\n\n', text)
     text = text.replace('  ', ' ')
+    text = text.replace('..', '.')
 
 txt_to_audio(text, base_name)
 print("All done!")
