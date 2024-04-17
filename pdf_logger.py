@@ -5,6 +5,10 @@ from tqdm import tqdm
 from PyPDF2 import PdfReader
 
 def create_pdf_log(directory):
+    # Initialize counters
+    total_files = 0
+    total_pages = 0
+
     # Get the current date
     current_date = datetime.datetime.now().strftime("%m-%d-%Y")
     
@@ -32,6 +36,19 @@ def create_pdf_log(directory):
             
             # Write the title and number of pages to the log file
             log_file.write(f"{title} ({num_pages} pages)\n")
+
+            # Update counters
+            total_files += 1
+            total_pages += num_pages
+        
+        # Calculate average number of pages
+        avg_pages = total_pages / total_files if total_files > 0 else 0
+
+        # Write summary to the log file
+        log_file.write("\n\n")
+        log_file.write(f"Total number of files: {total_files}\n")
+        log_file.write(f"Total number of pages: {total_pages}\n")
+        log_file.write(f"Average number of pages: {avg_pages:.2f}\n")
 
         print("PDF log created successfully.")
 
