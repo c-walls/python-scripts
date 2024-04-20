@@ -1,23 +1,26 @@
+#!/usr/bin/env python3
+
 import os
 import sys
 import re
 import unicodedata
-from PyPDF2 import PdfFileReader
+from PyPDF4 import PdfFileReader
 from pdf2jpg import pdf2jpg
 import pytesseract
 from tqdm import tqdm
+
+# Setting the Tesseract path
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'  # Update this path if necessary
 
 input_file = sys.argv[1]
 if not input_file.endswith((".pdf")):
     print("Please provide a PDF file as input.")
     sys.exit()
 
-# Setting the Tesseract path
-pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'  # Update this path if necessary
+# Get the base name of the file without the extension
+base_name = os.path.splitext(os.path.basename(input_file))[0]
 
 def pdf_to_txt(input_file):
-    # Get the base name of the file without the extension
-    base_name = os.path.splitext(os.path.basename(input_file))[0]
 
     # Opening the PDF file and creating a reader object
     pdf_file = open(input_file, "rb")
@@ -82,3 +85,5 @@ def pdf_to_txt(input_file):
     print(f"Text file saved as {text_file}")
 
     return text_file
+
+pdf_to_txt(input_file)
