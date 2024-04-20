@@ -14,7 +14,7 @@ from pdf2jpg import pdf2jpg
 from google.cloud import texttospeech
 
 # Setting the Tesseract path
-pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'  # Update this path if necessary
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
 # Checking if the input file is a PDF
 input_file = sys.argv[1]
@@ -24,7 +24,6 @@ if not input_file.endswith((".pdf", ".txt")):
 
 # Get the base name of the file without the extension
 base_name = os.path.splitext(os.path.basename(input_file))[0]
-
 
 def pdf_to_txt(input_file, base_name):
     # Opening the PDF file and creating a reader object
