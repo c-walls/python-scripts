@@ -4,26 +4,19 @@ import sys
 from tqdm import tqdm
 from PyPDF2 import PdfReader
 
+### This script generates a log file containing the titles and number of pages of all PDF files in a directory. ###
+
 def create_pdf_log(directory):
-    # Initialize counters
     total_files = 0
     total_pages = 0
-
-    # Get the current date
     current_date = datetime.datetime.now().strftime("%m-%d-%Y")
-    
-    # Create the log file name
     log_file_name = f"pdf_log_{current_date}.txt"
-    
-    # Create the log file path
     log_file_path = os.path.join(directory, log_file_name)
     
     # Get the list of PDF files in the directory
     pdf_files = [file for file in os.listdir(directory) if file.endswith(".pdf")]
     
-    # Open the log file in write mode
     with open(log_file_path, "w", encoding="utf-8") as log_file:
-        # Iterate over the PDF files
         for pdf_file in tqdm(pdf_files, desc="Processing PDF files"):
             # Get the title of the PDF file
             title = os.path.splitext(pdf_file)[0].replace("_", " ")
@@ -54,7 +47,6 @@ def create_pdf_log(directory):
 
 if len(sys.argv) > 1:
     directory_path = sys.argv[1]
-    # Call the function to create the PDF log
     create_pdf_log(directory_path)
 else:
     print("Please provide a directory path as a command-line argument.")

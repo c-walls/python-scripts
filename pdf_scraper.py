@@ -7,10 +7,7 @@ from pdf2jpg import pdf2jpg
 import pytesseract
 from tqdm import tqdm
 
-input_file = sys.argv[1]
-if not input_file.endswith((".pdf")):
-    print("Please provide a PDF file as input.")
-    sys.exit()
+### This script uses Tesseract OCR to scrape text from a PDF file that is not text-searchable
 
 # Setting the Tesseract path
 pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'  # Update this path if necessary
@@ -82,3 +79,10 @@ def pdf_to_txt(input_file):
     print(f"Text file saved as {text_file}")
 
     return text_file
+
+input_file = sys.argv[1]
+if not input_file.endswith((".pdf")):
+    print("Please provide a PDF file as input.")
+    sys.exit()
+else:
+    pdf_to_txt(input_file)

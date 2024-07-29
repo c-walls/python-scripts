@@ -4,6 +4,8 @@ import sys
 from tqdm import tqdm
 import re
 
+### This script extracts text from all PDF files in a directory and saves it to a single text file. ###
+
 def extract_text_from_pdf(pdf_path):
     text = ""
     with open(pdf_path, "rb") as file:
@@ -28,6 +30,7 @@ def main(input_folder):
 if len(sys.argv) != 2:
     print("Usage: python script.py <input_folder>")
     sys.exit(1)
-input_folder = sys.argv[1]
-main(input_folder)
-print("Text extracted and saved to", os.path.basename(input_folder) + ".txt")
+else:
+    input_folder = sys.argv[1]
+    main(input_folder)
+    print("Text extracted and saved to", os.path.basename(input_folder) + ".txt")
