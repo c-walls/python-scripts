@@ -1,22 +1,22 @@
+#!/usr/bin/env python3
+
 import os
 import sys
 import re
 import unicodedata
-from PyPDF2 import PdfFileReader
+from PyPDF4 import PdfFileReader
 from pdf2jpg import pdf2jpg
 import pytesseract
 from tqdm import tqdm
 
 ### This script uses Tesseract OCR to scrape text from a PDF file that is not text-searchable
-
 # Setting the Tesseract path
 pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'  # Update this path if necessary
 
 def pdf_to_txt(input_file):
-    # Get the base name of the file without the extension
-    base_name = os.path.splitext(os.path.basename(input_file))[0]
 
     # Opening the PDF file and creating a reader object
+    base_name = os.path.splitext(os.path.basename(input_file))[0]
     pdf_file = open(input_file, "rb")
     pdf_reader = PdfFileReader(pdf_file)
 
